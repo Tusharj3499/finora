@@ -1,0 +1,15 @@
+package com.finora.payment.repository;
+
+import com.finora.payment.domain.Payment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
+
+    Optional<Payment> findByPaymentReference(String paymentReference);
+
+    boolean existsByPaymentReference(String paymentReference);
+}
