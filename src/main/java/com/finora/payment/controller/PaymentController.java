@@ -2,6 +2,7 @@ package com.finora.payment.controller;
 
 import com.finora.payment.domain.enums.PaymentStatus;
 import com.finora.payment.dto.request.CreatePaymentRequest;
+import com.finora.payment.dto.request.UpdatePaymentStatusRequest;
 import com.finora.payment.dto.response.PaymentResponse;
 import com.finora.payment.service.PaymentService;
 import constants.AppConstants;
@@ -32,7 +33,6 @@ public class PaymentController {
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable Long paymentId){
-
         PaymentResponse response = paymentService.getPaymentById(paymentId);
         return ResponseEntity.ok(response);
     }
@@ -67,4 +67,16 @@ public class PaymentController {
                 paymentService.getPaymentsByStatus(paymentStatus,page, size)
         );
     }
+
+    @PatchMapping("/{paymentId}/status")
+    public ResponseEntity<PaymentResponse> updatePaymentStatus(
+            @PathVariable Long paymentId,
+            @Valid @RequestBody UpdatePaymentStatusRequest request) {
+
+        return ResponseEntity.ok(
+                paymentService.updatePaymentStatus(
+                        paymentId,
+                        request.getPaymentStatus()));
+    }
+
 }

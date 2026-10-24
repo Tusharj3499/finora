@@ -3,6 +3,7 @@ package com.finora.payment.domain;
 import com.finora.payment.domain.enums.PaymentMethod;
 import com.finora.payment.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,21 +17,29 @@ public class Payment {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @Column(name = "payment_reference",nullable = false,unique = true,length = 50)
-    private String paymentReference;
-
-    @Column(name = "amount",nullable = false,precision = 19 , scale = 2)
+    @NotNull
+    @DecimalMin("0.01")
+    @Digits(integer = 17, fraction = 2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "currency",nullable = false,length = 3)
+    @NotBlank
+    @Size(min = 3, max = 3)
+    @Column(nullable = false, length = 3)
     private String currency;
 
+    @NotBlank
+    @Column(name = "payment_reference", nullable = false, unique = true)
+    private String paymentReference;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status",nullable = false,length = 30)
+    @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "paymentMethod",nullable = false,length = 30)
+    @Column(name = "payment_method", nullable = false)
     private PaymentMethod paymentMethod;
 
     @Column(name = "created_at",nullable = false,updatable = false)
